@@ -75,12 +75,12 @@ function logResponseBody() {
 	if (RESPONSE_BODY && !/^504|401|403$/.test(pm.response.code)) {
 		try {
 			JSON.parse(RESPONSE_BODY);
-			pm.test(`Response Body: ${RESPONSE_BODY}`, () => {});
+			pm.test(`${pm.info.requestName}: Response Body: ${RESPONSE_BODY}`, () => {});
 		} catch (error) {
 			console.log("Response body is not valid JSON");
 		}
 	} else {
-		pm.test(`Response Body: ${RESPONSE_BODY}`, () => {});
+		pm.test(`${pm.info.requestName}: Response Body: ${RESPONSE_BODY}`, () => {});
 	}
 }
 
@@ -251,8 +251,7 @@ function checkStatusCode(statusCode) {
 			default:
 				throw new RangeError(`${COMMON.RANGE_ERROR.MESSAGE} ${getFunctionNameFromInside(new Error())}`);
 		}
-		descriptionStatusCode = pm.info.requestName + ": " + descriptionStatusCode
-		pm.test(descriptionStatusCode, () => {
+		pm.test(pm.info.requestName + ": " + descriptionStatusCode, () => {
 			pm.response.to.have.status(statusCode);
 		});
 		if (pm.response.code != statusCode) {
