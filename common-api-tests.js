@@ -210,7 +210,7 @@ function generateString(length) {
 function checkTime(time) {
 	if (getType(time) === "Number") {
 		if (time > 0) {
-			pm.test(`Response Time < ${convertTime(time)}`, () => {
+			pm.test(`${pm.info.requestName}: Response Time < ${convertTime(time)}`, () => {
 				pm.expect(pm.response.responseTime).to.be.below(time);
 			});
 		} else {
@@ -251,6 +251,7 @@ function checkStatusCode(statusCode) {
 			default:
 				throw new RangeError(`${COMMON.RANGE_ERROR.MESSAGE} ${getFunctionNameFromInside(new Error())}`);
 		}
+		descriptionStatusCode = pm.info.requestName + ": " + descriptionStatusCode
 		pm.test(descriptionStatusCode, () => {
 			pm.response.to.have.status(statusCode);
 		});
@@ -276,7 +277,7 @@ function checkStatusCode(statusCode) {
  */
 function checkContentType(contentType) {
 	if (getType(contentType) === "String") {
-		pm.test("Content Type", () => {
+		pm.test(pm.info.requestName +": Content Type", () => {
 			pm.response.to.have.header("Content-Type");
 			pm.expect(pm.response.headers.get("Content-Type")).to.include(contentType);
 		});
@@ -311,7 +312,7 @@ function checkJSONSchema(jsonSchema) {
  */
 function checkLocation(location) {
 	if (getType(location) === "String") {
-		pm.test("Location", () => {
+		pm.test(pm.info.requestName + ": Location", () => {
 			pm.response.to.be.header("Location", location);
 		});
 	} else {
