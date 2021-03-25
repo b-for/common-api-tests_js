@@ -296,7 +296,7 @@ function checkJSONSchema(jsonSchema) {
 	if (getType(jsonSchema) === "Object") {
 		const VALID = tv4.validate(pm.response.json(), jsonSchema),
 			  DESCRIPTION_JSON_SCHEMA = VALID ? "JSON Schema" : `JSON Schema (${tv4.error.message} for data path ${tv4.error.dataPath ? tv4.error.dataPath : "/"})`;
-		pm.test(DESCRIPTION_JSON_SCHEMA, () => {
+		pm.test(pm.info.requestName + ": " + DESCRIPTION_JSON_SCHEMA, () => {
 			pm.expect(VALID).to.be.true;
 		});
 	} else {
